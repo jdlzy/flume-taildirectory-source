@@ -52,7 +52,6 @@ public class FileSet {
 		this.filePath = filePath;
 		
 		file = new File(filePath.toString());
-
 		if ("end".equals(startFrom)) {
 			fileIsOpen = false;
 		} else {
@@ -199,4 +198,5 @@ public class FileSet {
 	public Path getFileName(){
 		return filePath.getFileName();
 	}
+	public String getParentName(){return file.getParentFile().getName();}
 }
