@@ -1,18 +1,5 @@
 package org.apache.flume.source.taildirectory;
 
-import java.nio.file.*;
-import java.nio.file.WatchEvent.Kind;
-
-import static java.nio.file.StandardWatchEventKinds.*;
-import static java.nio.file.LinkOption.*;
-
-import java.nio.file.attribute.*;
-import java.io.*;
-import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import org.apache.flume.Context;
 import org.apache.flume.Event;
 import org.apache.flume.event.EventBuilder;
@@ -20,8 +7,21 @@ import org.apache.flume.source.AbstractSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class WatchDir {
-	
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.*;
+import java.nio.file.WatchEvent.Kind;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
+import static java.nio.file.LinkOption.NOFOLLOW_LINKS;
+import static java.nio.file.StandardWatchEventKinds.*;
+
+public class WatchDir_backup {
+
 	private static final String UNLOCK_TIME = "unlockFileTime";
 	private static final String FILE_HEADER = "fileHeader";
 	private static final String BASENAME_HEADER = "basenameHeader";
@@ -41,7 +41,7 @@ public class WatchDir {
 	private boolean followLinks;
 
 	private static final Logger LOGGER= LoggerFactory
-			.getLogger(WatchDir.class);
+			.getLogger(WatchDir_backup.class);
 
 	private final ScheduledExecutorService scheduler = Executors
 			.newScheduledThreadPool(2);
@@ -49,8 +49,8 @@ public class WatchDir {
 	/**
 	 * Creates a WatchService and registers the given directory
 	 */
-	WatchDir(Path dir, AbstractSource source, Context context,
-			DirectoryTailSourceCounter counter) throws IOException {
+	WatchDir_backup(Path dir, AbstractSource source, Context context,
+                    DirectoryTailSourceCounter counter) throws IOException {
 
 		LOGGER.trace("WatchDir: WatchDir");
 
@@ -83,9 +83,9 @@ public class WatchDir {
 		
 		timeToUnlockFile = context.getLong(UNLOCK_TIME, 1L);
 		fileHeader = new Boolean(context.getBoolean(FILE_HEADER, false));
-		fileHeaderKey = new String(context.getString(FILE_HEADER_KEY, "flag"));
-//		basenameHeader = new Boolean(context.getBoolean(BASENAME_HEADER, false));
-//		basenameHeaderKey = new String(context.getString(BASENAME_HEADER_KEY, "basename"));
+		fileHeaderKey = new String(context.getString(FILE_HEADER_KEY, "file"));
+		basenameHeader = new Boolean(context.getBoolean(BASENAME_HEADER, false));
+		basenameHeaderKey = new String(context.getString(BASENAME_HEADER_KEY, "basename"));
 		followLinks = new Boolean(context.getBoolean(FOLLOW_LINKS, false));
 	}
 
@@ -249,11 +249,10 @@ public class WatchDir {
 				fileSet.getHeaders());
 		
 		Map<String,String> headers = new HashMap<String, String>();
-		//使用父文件目录代替
 		if (fileHeader)
-			headers.put(fileHeaderKey,fileSet.getParentName());
-//		if (basenameHeader)
-//			headers.put(basenameHeaderKey, fileSet.getFileName().toString());
+			headers.put(fileHeaderKey,fileSet.getFilePath().toString());
+		if (basenameHeader)
+			headers.put(basenameHeaderKey, fileSet.getFileName().toString());
 		if (!headers.isEmpty())
 			event.setHeaders(headers);
 		
