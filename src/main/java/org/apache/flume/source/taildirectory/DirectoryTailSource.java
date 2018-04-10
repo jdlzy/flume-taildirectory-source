@@ -59,7 +59,7 @@ public class DirectoryTailSource extends AbstractSource implements
 
 	@Override
 	public void start() {
-		LOGGER.info("Source Starting..");
+		LOGGER.info("开始监控..");
 		watchDirs = new HashSet<WatchDir>();
 		counter.start();
 

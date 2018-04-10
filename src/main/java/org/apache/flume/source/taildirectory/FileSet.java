@@ -95,7 +95,9 @@ public class FileSet {
 	}
 
 	public String readLine() throws IOException {
-		return rReader.readLine();
+		String result=new String(rReader.readLine().getBytes("ISO-8859-1"), "utf-8");
+		System.out.println(result);
+		return result;
 	}
 
 	public long getLastAppendTime() {
@@ -105,7 +107,6 @@ public class FileSet {
 	public void setLastAppendTime(long lastAppendTime) {
 		this.lastAppendTime = lastAppendTime;
 	}
-
 	public boolean appendLine(String buffer) {
 		boolean ret = bufferList.add(buffer);
 		if (ret) {

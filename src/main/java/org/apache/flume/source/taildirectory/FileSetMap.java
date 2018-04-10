@@ -47,7 +47,7 @@ public class FileSetMap extends HashMap<String, FileSet> {
 		String fileKey = FileKeys.getFileKey(path);
 
 		if (!this.containsKey(fileKey)) {
-			LOGGER.info("Scanning file: " + path.toString() + " with key: "
+			LOGGER.info("扫描到文件: " + path.toString() + " with key: "
 					+ fileKey);
 				fileSet = new FileSet(path, startFrom);
 				filePathsAndKeys.put(path.toString(), fileKey);

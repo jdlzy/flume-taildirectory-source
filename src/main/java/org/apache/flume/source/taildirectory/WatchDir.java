@@ -243,15 +243,14 @@ public class WatchDir {
 
 		if (fileSet.getBufferList().isEmpty())
 			return;
-
 		StringBuilder sb = fileSet.getAllLines();
-		Event event = EventBuilder.withBody(String.valueOf(sb).getBytes(),
+		Event event = EventBuilder.withBody(sb.toString().getBytes(),
 				fileSet.getHeaders());
 		
 		Map<String,String> headers = new HashMap<String, String>();
 		//使用父文件目录代替
 		if (fileHeader)
-			headers.put(fileHeaderKey,fileSet.getParentName());
+			headers.put(fileHeaderKey,fileSet.getParentName().toUpperCase());
 //		if (basenameHeader)
 //			headers.put(basenameHeaderKey, fileSet.getFileName().toString());
 		if (!headers.isEmpty())
