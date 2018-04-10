@@ -96,7 +96,7 @@ public class FileSet {
 
 	public String readLine() throws IOException {
 		String result=new String(rReader.readLine().getBytes("ISO-8859-1"), "utf-8");
-		System.out.println(result);
+//		System.out.println(result);
 		return result;
 	}
 
